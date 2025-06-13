@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+    <a href="/" class="btn btn-outline-secondary back-btn">⬅ Orqaga</a>
+
+    <div class="product-card row align-items-center">
+        <div class="col-md-5">
+            <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-7 mt-4 mt-md-0">
+            <h2>{{ product.name }}</h2>
+            <p><strong>Kategoriya:</strong> {{ product.category.name }}</p>
+            <p><strong>Miqdor:</strong> {{ product.quantity }}</p>
+            <p><strong>Sana:</strong> {{ product.created_at }}</p>
+            <p><strong>Tavsif:</strong> {{ product.description }}</p>
+            <h4 class="price">${{ product.price }}</h4>
+            <button class="btn btn-primary mt-3 px-4">Sotib olish</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

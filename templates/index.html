@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Bu index html fayli, lekin bu base.html ni ichida chiqyapdi</h1>
+
+<div class="container">
+    <div style="gap: 15px" class="row">
+        {% if products %}
+        {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">Narxi: {{ product.price }} so'm</p>
+                <a class="btn btn-primary" href="{% url 'detail' product.id %}">Batafsil</a>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h2>Qidiruv natijasiga ko'ra productlar topilmadi</h2>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
