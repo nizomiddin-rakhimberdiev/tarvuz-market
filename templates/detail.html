@@ -15,8 +15,9 @@
             <p><strong>Miqdor:</strong> {{ product.quantity }}</p>
             <p><strong>Sana:</strong> {{ product.created_at }}</p>
             <p><strong>Tavsif:</strong> {{ product.description }}</p>
-            <h4 class="price">${{ product.price }}</h4>
+            <h4 class="price">{{ product.price }} so'm</h4>
             <button class="btn btn-primary mt-3 px-4">Sotib olish</button>
+            <a href="{% url 'add_to_cart' product.id %}">Savatga qo'shish</a>
         </div>
     </div>
 </div>

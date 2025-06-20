@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+
+<div class="container py-5">
+    <a href="/" class="btn btn-outline-secondary back-btn">⬅ Orqaga</a>
+
+    <h2 class="mb-4">Savat</h2>
+
+    {% if cart_items %}
+        <div class="cart-items">
+            {% for item in cart_items %}
+                <div class="cart-item row align-items-center mb-3 border bg-white">
+                    <div class="col-md-2">
+                        <img src="{{ item.product.image.url }}" class="img-fluid" alt="{{ item.product.name }}">
+                    </div>
+                    <div class="col-md-6">
+                        <h5>{{ item.product.name }}</h5>
+                        <p>{{ item.product.description }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <p>{{ item.quantity }} x {{ item.product.price }} so'm</p>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <a href="" class="btn btn-danger">O'chirish</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>  
+        <div class="text-end">
+            <h4>Jami: {{ total_price }} so'm</h4>
+            <a href="" class="btn btn-success">To'lov</a>
+        </div>
+    {% else %}      
+        <p>Savat bo'sh.</p>
+    {% endif %}
+</div>  
+
+{% endblock %}
