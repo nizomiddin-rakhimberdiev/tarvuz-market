@@ -22,7 +22,7 @@
                         <p>{{ item.quantity }} x {{ item.product.price }} so'm</p>
                     </div>
                     <div class="col-md-2 text-end">
-                        <a href="" class="btn btn-danger">O'chirish</a>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">O'chirish</a>
                     </div>
                 </div>
             {% endfor %}

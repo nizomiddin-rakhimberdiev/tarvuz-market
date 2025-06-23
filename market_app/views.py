@@ -55,6 +55,7 @@ def add_to_cart_view(request, id):
             return redirect('detail', id=id)
     else:
         return redirect('login')
+    return render(request, 'detail.html', {'product': product})
     
 def view_cart(request):
     if request.user.is_authenticated:
@@ -68,3 +69,14 @@ def view_cart(request):
         return render(request, 'cart.html', context)
     else:
         return redirect('login')
+    
+def remove_from_cart(request, id):
+    if request.user.is_authenticated:
+        cart = Cart.objects.get(user=request.user)
+        cart_item = CartItem.objects.get(id=id, cart=cart)
+        if cart_item:
+            cart_item.delete()
+            return redirect('view_cart')
+    else:
+        return redirect('login')
+    return render(request, 'cart.html')
