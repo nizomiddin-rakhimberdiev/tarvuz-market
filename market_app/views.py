@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product, Cart, CartItem, Order, OrderItem
+from .models import Product, Cart, CartItem, Order, OrderItem, Comment
 from .forms import AddProductForm, AddCategoryForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
@@ -21,8 +21,14 @@ def home_page(request):
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        Comment.objects.create(text=comment, product=product, user=request.user)
+        return redirect('detail', id=id)
+    comments = Comment.objects.all()
     context = {
-        'product': product
+        'product': product,
+        'comments': comments
     }
     return render(request, 'detail.html', context)
 
@@ -108,3 +114,12 @@ def minus_cart_view(request, id):
     cart_item.quantity -= 1
     cart_item.save()
     return redirect('view_cart')
+
+@login_required(login_url='login')
+def add_comment_view(request, id):
+    product = Product.objects.get(id=id)
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        Comment.objects.create(text=comment, product=product, user=request.user)
+        return redirect('detail', id=id)
+    return render(request, 'detail.html', {'product': product})

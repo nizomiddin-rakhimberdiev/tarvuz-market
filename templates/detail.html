@@ -19,7 +19,22 @@
             <button class="btn btn-primary mt-3 px-4">Sotib olish</button>
             <a href="{% url 'add_to_cart' product.id %}">Savatga qo'shish</a>
         </div>
+
+        <form method="post" class="my-5 d-flex">
+            {% csrf_token %}
+            <input type="text" class="form-control" name="comment" placeholder="Maxsulot haqida qanday fikrdasiz?...">
+            <button type="submit" class="btn btn-secondary">Comment</button>
+        </form>
+        <div class="my-3">
+            <h3>Comments</h3>
+            <ul>
+                {% for comment in comments %}
+                <li>{{ comment.text }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
 </div>
 
 {% endblock %}
