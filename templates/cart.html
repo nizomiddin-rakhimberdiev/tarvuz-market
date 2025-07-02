@@ -10,18 +10,20 @@
     {% if cart_items %}
         <div class="cart-items">
             {% for item in cart_items %}
-                <div class="cart-item row align-items-center mb-3 border bg-white">
+                <div class="cart-item row align-items-center mb-3 border bg-white py-3">
                     <div class="col-md-2">
                         <img src="{{ item.product.image.url }}" class="img-fluid" alt="{{ item.product.name }}">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h5>{{ item.product.name }}</h5>
                         <p>{{ item.product.description }}</p>
                     </div>
-                    <div class="col-md-2">
-                        <p>{{ item.quantity }} x {{ item.product.price }} so'm</p>
+                    <div class="col-md-3">
+                        <p class="d-inline">{{ item.quantity }} x {{ item.product.price }} so'm</p>
+                        <a class="btn btn-lite border" href="{% url 'minus_cart' item.id %}">➖</a>
+                        <a class="btn btn-lite border" href="{% url 'plus_cart' item.id %}">➕</a>
                     </div>
-                    <div class="col-md-2 text-end">
+                    <div class="col-md-3 text-end">
                         <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">O'chirish</a>
                     </div>
                 </div>

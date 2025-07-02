@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Product, Cart, CartItem, Order, OrderItem
 from .forms import AddProductForm, AddCategoryForm
+from users.models import CustomUser
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
+
 def home_page(request):
     products = Product.objects.all()
     query = request.POST.get('search')
@@ -56,7 +60,8 @@ def add_to_cart_view(request, id):
     else:
         return redirect('login')
     return render(request, 'detail.html', {'product': product})
-    
+
+@login_required(login_url='login')
 def view_cart(request):
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -70,6 +75,7 @@ def view_cart(request):
     else:
         return redirect('login')
     
+@login_required(login_url='login')
 def remove_from_cart(request, id):
     if request.user.is_authenticated:
         cart = Cart.objects.get(user=request.user)
@@ -80,3 +86,25 @@ def remove_from_cart(request, id):
     else:
         return redirect('login')
     return render(request, 'cart.html')
+
+@login_required(login_url='login')
+def profile_view(request):
+    user = CustomUser.objects.get(id=request.user.id)
+    context = {
+        'user': user
+    }
+    return render(request, 'profile.html', context)
+
+@login_required(login_url='login')
+def plus_cart_view(request, id):
+    cart_item = CartItem.objects.get(id=id)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('view_cart')
+
+@login_required(login_url='login')
+def minus_cart_view(request, id):
+    cart_item = CartItem.objects.get(id=id)
+    cart_item.quantity -= 1
+    cart_item.save()
+    return redirect('view_cart')
