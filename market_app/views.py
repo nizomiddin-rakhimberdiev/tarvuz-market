@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Product, Cart, CartItem, Order, OrderItem, Comment
-from .forms import AddProductForm, AddCategoryForm
+from .forms import AddProductForm, AddCategoryForm, EditProfileForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 
@@ -22,10 +22,13 @@ def home_page(request):
 def product_detail(request, id):
     product = Product.objects.get(id=id)
     if request.method == 'POST':
-        comment = request.POST.get('comment')
-        Comment.objects.create(text=comment, product=product, user=request.user)
-        return redirect('detail', id=id)
-    comments = Comment.objects.all()
+        if request.user.is_authenticated:
+            comment = request.POST.get('comment')
+            Comment.objects.create(text=comment, product=product, user=request.user)
+            return redirect('detail', id=id)
+        else:
+            return redirect('login')
+    comments = Comment.objects.filter(product=product)
     context = {
         'product': product,
         'comments': comments
@@ -96,8 +99,19 @@ def remove_from_cart(request, id):
 @login_required(login_url='login')
 def profile_view(request):
     user = CustomUser.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            phone_number = form.cleaned_data['phone_number']
+            form.save()
+            user.username = phone_number
+            user.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=user)
     context = {
-        'user': user
+        'user': user,
+        'form': form
     }
     return render(request, 'profile.html', context)
 
@@ -115,11 +129,6 @@ def minus_cart_view(request, id):
     cart_item.save()
     return redirect('view_cart')
 
-@login_required(login_url='login')
-def add_comment_view(request, id):
-    product = Product.objects.get(id=id)
-    if request.method == 'POST':
-        comment = request.POST.get('comment')
-        Comment.objects.create(text=comment, product=product, user=request.user)
-        return redirect('detail', id=id)
-    return render(request, 'detail.html', {'product': product})
+
+
+

@@ -27,9 +27,9 @@
         </form>
         <div class="my-3">
             <h3>Comments</h3>
-            <ul>
+            <ul class="list-group">
                 {% for comment in comments %}
-                <li>{{ comment.text }}</li>
+                <li class="list-group-item"><h5 class="d-inline">{{comment.user.first_name}} {{ comment.user.last_name }}: </h5>{{ comment.text }}</li>
                 {% endfor %}
             </ul>
         </div>

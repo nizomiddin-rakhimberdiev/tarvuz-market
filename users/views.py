@@ -6,12 +6,13 @@ from .models import CustomUser
 def create_or_login_view(request):
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
-        user = authenticate(username=phone_number)
+        password = "1234567890"
+        user = authenticate(username=phone_number, password=password)
         if user:
             login(request, user)
             return redirect('home')
         else:
-            user = CustomUser.objects.create_user(username=phone_number, phone_number=phone_number)
+            user = CustomUser.objects.create_user(username=phone_number, phone_number=phone_number, password=password)
             user.save()
             login(request, user)
             return redirect('home')
