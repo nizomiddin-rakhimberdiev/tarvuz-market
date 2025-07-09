@@ -10,7 +10,8 @@
             <h3>Phone: {{ user.phone_number }}</h3>
             <h4>Email: {{ user.email }}</h4>
             <!-- <a class="btn btn-warning" href="">Edit profile</a> -->
-            <a class="btn btn-danger" href="">Logout</a>
+            <a class="btn btn-danger" href="{% url 'logout' %}">Logout</a>
+            <a class="btn btn-secondary" href="{% url 'order_history' %}">Order history</a>
         </div>
         <div class="col-md-6">
             <form method="post">

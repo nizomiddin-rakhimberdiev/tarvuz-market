@@ -130,5 +130,28 @@ def minus_cart_view(request, id):
     return redirect('view_cart')
 
 
+@login_required(login_url='login')
+def order_view(request):
+    cart = Cart.objects.get(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    if request.method == 'POST':
+        address = request.POST.get('address')
+        order = Order.objects.create(user=request.user, total_price=total_price, address=address)
+        for item in cart_items:
+            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+        cart_items.delete()
+        return redirect('home')
+    context = {
+        'cart_items': cart_items,
+        'total_price': total_price
+    }
+    return render(request, 'order.html', context)
 
-
+@login_required(login_url='login')
+def order_history_view(request):
+    orders = Order.objects.filter(user=request.user)
+    context = {
+        'orders': orders
+    }
+    return render(request, 'order_history.html', context)
