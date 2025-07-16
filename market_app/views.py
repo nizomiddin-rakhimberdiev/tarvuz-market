@@ -150,7 +150,7 @@ def order_view(request):
 
 @login_required(login_url='login')
 def order_history_view(request):
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
     context = {
         'orders': orders
     }
