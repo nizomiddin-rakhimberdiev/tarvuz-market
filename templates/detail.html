@@ -2,39 +2,81 @@
 
 {% block content %}
 
+<style>
+  .product-image-box, .product-info-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  }
+  .price-tag {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+  }
+  .buy-btn {
+    background-color: #007bff;
+    color: white;
+    border-radius: 50px;
+    padding: 10px 30px;
+  }
+  .cart-btn {
+    border-radius: 50px;
+    padding: 10px 30px;
+  }
+  .comment-box {
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 50px;
+  }
+</style>
+
 <div class="container py-5">
-    <a href="/" class="btn btn-outline-secondary back-btn">⬅ Orqaga</a>
+  <a href="/" class="btn btn-outline-secondary mb-4 rounded-pill fw-bold">
+    <i class="bi bi-arrow-left"></i> Orqaga
+  </a>
 
-    <div class="product-card row align-items-center">
-        <div class="col-md-5">
-            <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
-        </div>
-        <div class="col-md-7 mt-4 mt-md-0">
-            <h2>{{ product.name }}</h2>
-            <p><strong>Kategoriya:</strong> {{ product.category.name }}</p>
-            <p><strong>Miqdor:</strong> {{ product.quantity }}</p>
-            <p><strong>Sana:</strong> {{ product.created_at }}</p>
-            <p><strong>Tavsif:</strong> {{ product.description }}</p>
-            <h4 class="price">{{ product.price }} so'm</h4>
-            <button class="btn btn-primary mt-3 px-4">Sotib olish</button>
-            <a href="{% url 'add_to_cart' product.id %}">Savatga qo'shish</a>
-        </div>
-
-        <form method="post" class="my-5 d-flex">
-            {% csrf_token %}
-            <input type="text" class="form-control" name="comment" placeholder="Maxsulot haqida qanday fikrdasiz?...">
-            <button type="submit" class="btn btn-secondary">Comment</button>
-        </form>
-        <div class="my-3">
-            <h3>Comments</h3>
-            <ul class="list-group">
-                {% for comment in comments %}
-                <li class="list-group-item"><h5 class="d-inline">{{comment.user.first_name}} {{ comment.user.last_name }}: </h5>{{ comment.text }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+  <div class="row g-4 align-items-start">
+    <div class="col-md-6">
+      <div class="product-image-box">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded-4 w-100" style="max-height: 450px; object-fit: contain;">
+      </div>
     </div>
+    <div class="col-md-6">
+      <div class="product-info-card h-100">
+        <h2 class="fw-bold mb-4">{{ product.name }}</h2>
+        <p><strong>Kategoriya:</strong> {{ product.category.name }}</p>
+        <p><strong>Miqdor:</strong> {{ product.quantity }}</p>
+        <p><strong>Sana:</strong> {{ product.created_at }}</p>
+        <p><strong>Tavsif:</strong> {{ product.description }}</p>
+        <h4 class="price-tag mt-4">{{ product.price }} so'm</h4>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="#" class="btn buy-btn">Sotib olish</a>
+          <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-success cart-btn">Savatga qo'shish</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div class="comment-box mt-5">
+    <form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="input-group">
+        <input type="text" name="comment" class="form-control rounded-start-pill" placeholder="Maxsulot haqida fikringiz...">
+        <button type="submit" class="btn btn-outline-primary rounded-end-pill">Comment</button>
+      </div>
+    </form>
+
+    <h4 class="fw-bold mb-3">Fikrlar</h4>
+    <ul class="list-group list-group-flush">
+      {% for comment in comments %}
+      <li class="list-group-item bg-transparent">
+        <strong>{{ comment.user.first_name }} {{ comment.user.last_name }}:</strong> {{ comment.text }}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 
 {% endblock %}

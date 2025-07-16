@@ -1,33 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-body p-5 bg-light-subtle">
+          <h2 class="text-center mb-5 text-primary-emphasis"><i class="bi bi-cart-check me-2"></i>Buyurtmani tasdiqlash</h2>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <h1>Buyurtmani tasdiqlash</h1>
-            <ul class="list-group">
-                {% for item in cart_items %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center" style="gap: 50px">
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width: 50px; height: 50px;">
-                            <h5>{{ item.product.name }}</h5>
-                            <p>{{ item.quantity }} x {{ item.product.price }} so'm</p>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-            <h3 class="mt-4">Jami: {{ total_price }} so'm</h3>
-            <form method="post" class="mt-4">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="address" class="form-label">Manzil</label>
-                    <input type="text" class="form-control" id="address" name="address" required>
+          <ul class="list-group mb-4">
+            {% for item in cart_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+              <div class="d-flex align-items-center gap-4">
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                <div>
+                  <h6 class="mb-0 fw-semibold">{{ item.product.name }}</h6>
+                  <small class="text-muted">{{ item.quantity }} x {{ item.product.price }} so'm</small>
                 </div>
-                <button type="submit" class="btn btn-success">Buyurtmani tasdiqlash</button>
-            </form>
-        </div>
-    </div>
-</div>
+              </div>
+              <span class="badge bg-success fs-6">{{ item.quantity|add:0|floatformat:0|add:""|floatformat:0 }}x</span>
+            </li>
+            {% endfor %}
+          </ul>
 
+          <h3 class="text-end text-success-emphasis">Jami: <strong>{{ total_price }}</strong> so'm</h3>
+
+          <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control rounded-pill" id="address" name="address" placeholder="Yashash manzilingiz" required>
+              <label for="address"><i class="bi bi-geo-alt-fill"></i> Yetkazib berish manzili</label>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                <i class="bi bi-bag-check-fill me-2"></i>Buyurtmani tasdiqlash
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

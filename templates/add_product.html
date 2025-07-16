@@ -2,12 +2,56 @@
 
 {% block content %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<style>
+  .form-container {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .form-control, .form-select {
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    box-shadow: none;
+    transition: border-color 0.3s ease;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+  }
+  label {
+    font-weight: 500;
+    margin-top: 10px;
+  }
+</style>
 
-    {{ form.as_p }}
+<div class="container py-5">
+  <a href="/" class="btn btn-outline-secondary mb-4 rounded-pill fw-bold">
+    <i class="bi bi-arrow-left"></i> Orqaga
+  </a>
 
-    <button class="btn btn-primary">Create</button>
-</form>
+  <div class="form-container">
+    <h2 class="text-center mb-4">Yangi mahsulot yaratish</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+          {{ field }}
+          {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+          {% for error in field.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <div class="text-end">
+        <button class="btn btn-primary rounded-pill px-4">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}
