@@ -14,7 +14,11 @@
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#order{{ order.id }}" aria-expanded="false" aria-controls="order{{ order.id }}">
-                Buyurtma #{{ order.id }} - {{ order.created_at|date:"Y-m-d H:i" }}
+                Buyurtma #{{ order.id }} - {{ order.created_at|date:"Y-m-d H:i" }} | {{ order.status }}
+                {% if order.status == 'Pending' %} ⏳
+                {% elif order.stauts == 'Completed' %} ✅
+                {% else %} ❌
+                {% endif %}
               </button>
             </h2>
             <div id="order{{ order.id }}" class="accordion-collapse collapse" data-bs-parent="#orderAccordion">

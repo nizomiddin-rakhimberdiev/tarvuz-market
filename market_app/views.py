@@ -3,6 +3,8 @@ from .models import Product, Cart, CartItem, Order, OrderItem, Comment
 from .forms import AddProductForm, AddCategoryForm, EditProfileForm
 from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
+from bot.main import send_message_to_admin
+import asyncio
 
 
 # Create your views here.
@@ -138,9 +140,12 @@ def order_view(request):
     if request.method == 'POST':
         address = request.POST.get('address')
         order = Order.objects.create(user=request.user, total_price=total_price, address=address)
+        data = f"{request.user.username}\n{address}"
         for item in cart_items:
             OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+            data+=f"\n{item.product.name} - {item.product.price} so'm, {item.quantity} dona\n"
         cart_items.delete()
+        asyncio.run(send_message_to_admin(data))
         return redirect('home')
     context = {
         'cart_items': cart_items,
@@ -155,3 +160,8 @@ def order_history_view(request):
         'orders': orders
     }
     return render(request, 'order_history.html', context)
+
+def change_status(request, id):
+    order = Order.objects.get(id=id)
+    order.status = 'Completed'
+    order.save()
