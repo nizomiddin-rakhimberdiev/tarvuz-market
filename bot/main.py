@@ -24,7 +24,7 @@ async def send_message_to_admin(data):
 
 @dp.callback_query(F.data == 'confirm_order')
 async def confirm(call: types.CallbackQuery):
-    
+    pass
 
 async def main():
     await dp.start_polling(bot)
